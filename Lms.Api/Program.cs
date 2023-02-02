@@ -1,4 +1,6 @@
 
+using Newtonsoft.Json.Serialization;
+
 namespace Lms.Api
 {
     public class Program
@@ -9,7 +11,16 @@ namespace Lms.Api
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(configure =>
+            {
+                configure.ReturnHttpNotAcceptable = true;
+            })
+                .AddNewtonsoftJson(setupAction =>
+            {
+                setupAction.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            })
+                .AddXmlDataContractSerializerFormatters();
+            
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
