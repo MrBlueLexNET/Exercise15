@@ -1,15 +1,16 @@
 ﻿using Lms.Core.Entities;
+using Lms.Core.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lms.Core.Repositories
+namespace Lms.Data.Repositories
 {
-    internal class TournamentRepository : ITournamentRepository
+    internal class GameRepository : IGameRepository
     {
-        public void Add(Tournament tournament)
+        public void Add(Game gane)
         {
             throw new NotImplementedException();
         }
@@ -19,22 +20,22 @@ namespace Lms.Core.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Tournament> Get(int id)
+        public Task<IEnumerable<Game>> GetAllAsync()
         {
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Tournament>> GetAll()
+        public Task<Game> GetAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public void Remove(Tournament tournament)
+        public void Remove(Game game)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(Tournament tournament)
+        public void Update(Game game)
         {
             throw new NotImplementedException();
         }
