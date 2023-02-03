@@ -3,12 +3,13 @@ using Newtonsoft.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Lms.Data.Data;
+using Lms.Api.Extensions;
 
 namespace Lms.Api
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddDbContext<LmsApiContext>(options =>
@@ -31,6 +32,8 @@ namespace Lms.Api
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
+
+            await app.SeedDataAsync();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
