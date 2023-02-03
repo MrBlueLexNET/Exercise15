@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Lms.Api.Data;
+using Lms.Data.Data;
 
 namespace Lms.Api
 {

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Lms.Core.Entities;
 
-namespace Lms.Api.Data
+namespace Lms.Data.Data
 {
     public class LmsApiContext : DbContext
     {
@@ -14,8 +14,8 @@ namespace Lms.Api.Data
         {
         }
 
-        public DbSet<Lms.Core.Entities.Tournament> Tournament { get; set; } = default!;
+        public DbSet<Tournament> Tournament { get; set; } = default!;
 
-        public DbSet<Lms.Core.Entities.Game> Game { get; set; } = default!;
+        public DbSet<Game> Game { get; set; } = default!;
     }
 }
