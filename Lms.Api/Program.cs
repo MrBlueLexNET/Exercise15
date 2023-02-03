@@ -1,5 +1,8 @@
 
 using Newtonsoft.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Lms.Api.Data;
 
 namespace Lms.Api
 {
@@ -8,6 +11,8 @@ namespace Lms.Api
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddDbContext<LmsApiContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("LmsApiContext") ?? throw new InvalidOperationException("Connection string 'LmsApiContext' not found.")));
 
             // Add services to the container.
 
