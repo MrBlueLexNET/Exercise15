@@ -32,7 +32,8 @@ namespace Lms.Api.Controllers
         }
 
         // GET: api/Tournaments/5
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("{id}")]
         public async Task<ActionResult<Tournament>> GetTournament(int id)
         {
           if (uow.TournamentRepository == null)

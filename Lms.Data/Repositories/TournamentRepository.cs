@@ -1,6 +1,8 @@
-﻿using Lms.Core.Entities;
+﻿using Bogus.DataSets;
+using Lms.Core.Entities;
 using Lms.Core.Repositories;
 using Lms.Data.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,14 +39,28 @@ namespace Lms.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Tournament>> GetAllAsync()
+        public async Task<IEnumerable<Tournament>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await db.Tournament
+            .ToListAsync();
         }
 
-        public Task<Tournament> GetAsync(int id)
+        public async Task<Tournament> GetAsync(int id)
         {
-            throw new NotImplementedException();
+
+
+            //var tournament = await db.Tournament.FindAsync(id);
+
+            //if (tournament == null)
+            //{
+            //    throw new ArgumentException($"'{nameof(id)}' cannot be found", nameof(id));
+            //}
+          
+            var query = db.Tournament
+                    .Include(c => c.Games)
+                    .AsQueryable();
+
+            return await query.FirstOrDefaultAsync(c => c.TournamentId == id);
         }
 
         public void Remove(Tournament tournament)
@@ -55,6 +71,11 @@ namespace Lms.Data.Repositories
         public void Update(Tournament tournament)
         {
             throw new NotImplementedException();
+        }
+
+        private bool TournamentExists(int id)
+        {
+            return (db.Tournament?.Any(e => e.TournamentId == id)).GetValueOrDefault();
         }
     }
 }

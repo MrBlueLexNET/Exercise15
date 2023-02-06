@@ -1,6 +1,7 @@
 ﻿using Lms.Core.Entities;
 using Lms.Core.Repositories;
 using Lms.Data.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,9 +28,10 @@ namespace Lms.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Game>> GetAllAsync()
+        public async Task<IEnumerable<Game>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await db.Game
+           .ToListAsync();
         }
 
         public Task<Game> GetAsync(int id)
