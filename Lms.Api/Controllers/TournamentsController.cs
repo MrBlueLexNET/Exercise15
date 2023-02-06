@@ -7,40 +7,39 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Lms.Data.Data;
 using Lms.Core.Entities;
+using Lms.Data.Repositories;
 
 namespace Lms.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/tournaments")]
     [ApiController]
     public class TournamentsController : ControllerBase
     {
-        private readonly LmsApiContext _context;
-
+        // private readonly LmsApiContext _context;
+        private readonly UoW uow;
         public TournamentsController(LmsApiContext context)
         {
-            _context = context;
+            //_context = context;
+            uow = new UoW(context);
         }
 
         // GET: api/Tournaments
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Tournament>>> GetTournament()
         {
-          if (_context.Tournament == null)
-          {
-              return NotFound();
-          }
-            return await _context.Tournament.ToListAsync();
+            var tournaments = await uow.TournamentRepository.GetAllAsync();
+            return Ok(tournaments);
         }
 
         // GET: api/Tournaments/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Tournament>> GetTournament(int id)
         {
-          if (_context.Tournament == null)
+          if (uow.TournamentRepository == null)
           {
               return NotFound();
           }
-            var tournament = await _context.Tournament.FindAsync(id);
+            var tournament = await uow.TournamentRepository.GetAsync(id);
 
             if (tournament == null)
             {
@@ -53,45 +52,45 @@ namespace Lms.Api.Controllers
         // PUT: api/Tournaments/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTournament(int id, Tournament tournament)
-        {
-            if (id != tournament.TournamentId)
-            {
-                return BadRequest();
-            }
+        //public async Task<IActionResult> PutTournament(int id, Tournament tournament)
+        //{
+        //    if (id != tournament.TournamentId)
+        //    {
+        //        return BadRequest();
+        //    }
 
-            _context.Entry(tournament).State = EntityState.Modified;
+        //    _context.Entry(tournament).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TournamentExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!TournamentExists(id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
         // POST: api/Tournaments
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Tournament>> PostTournament(Tournament tournament)
         {
-          if (_context.Tournament == null)
+          if (uow.TournamentRepository == null)
           {
               return Problem("Entity set 'LmsApiContext.Tournament'  is null.");
           }
-            _context.Tournament.Add(tournament);
-            await _context.SaveChangesAsync();
+            uow.TournamentRepository.Add(tournament);
+            await uow.CompleteAsync();
 
             return CreatedAtAction("GetTournament", new { id = tournament.TournamentId }, tournament);
         }
@@ -100,25 +99,25 @@ namespace Lms.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTournament(int id)
         {
-            if (_context.Tournament == null)
+            if (uow.TournamentRepository == null)
             {
                 return NotFound();
             }
-            var tournament = await _context.Tournament.FindAsync(id);
+            var tournament = await uow.TournamentRepository.GetAsync(id);
             if (tournament == null)
             {
                 return NotFound();
             }
 
-            _context.Tournament.Remove(tournament);
-            await _context.SaveChangesAsync();
+            uow.TournamentRepository.Remove(tournament);
+            await uow.CompleteAsync();
 
             return NoContent();
         }
 
-        private bool TournamentExists(int id)
-        {
-            return (_context.Tournament?.Any(e => e.TournamentId == id)).GetValueOrDefault();
-        }
+        //private bool TournamentExists(int id)
+        //{
+        //    return (uow.TournamentRepository?.Any(e => e.TournamentId == id)).GetValueOrDefault();
+        //}
     }
 }

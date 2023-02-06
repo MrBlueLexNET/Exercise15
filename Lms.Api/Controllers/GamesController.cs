@@ -11,7 +11,7 @@ using Lms.Data.Repositories;
 
 namespace Lms.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/games")]
     [ApiController]
     public class GamesController : ControllerBase
     {
