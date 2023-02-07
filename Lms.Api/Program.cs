@@ -35,6 +35,8 @@ namespace Lms.Api
 
             builder.Services.AddScoped<IUoW, UoW>();
 
+            builder.Services.AddAutoMapper(typeof(MapperProfile));
+
             var app = builder.Build();
 
             await app.SeedDataAsync();

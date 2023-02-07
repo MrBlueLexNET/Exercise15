@@ -17,10 +17,13 @@ namespace Lms.Api.Controllers
     {
         // private readonly LmsApiContext _context;
         private readonly UoW uow;
-        public TournamentsController(LmsApiContext context)
+        private readonly IMapper mapper;
+
+        public TournamentsController(LmsApiContext context, IMapper mapper)
         {
             //_context = context;
             uow = new UoW(context);
+            this.mapper = mapper;
         }
 
         // GET: api/Tournaments
