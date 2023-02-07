@@ -87,5 +87,20 @@ namespace Lms.Data.Repositories
         {
             return (db.Tournament?.Any(e => e.TournamentId == id)).GetValueOrDefault();
         }
+
+        //public async Task<IEnumerable<Tournament>> GetTournamentsAsync(IEnumerable<Guid> tournamentIds)
+        //{
+        //    if (tournamentIds == null)
+        //    {
+        //        throw new ArgumentNullException(nameof(tournamentIds));
+        //    }
+
+        //    return await db.Tournament.Where(t => tournamentIds.Contains(t.TournamentId))
+        //                              .OrderBy(t => t.Title)
+        //                              .ToListAsync();
+        //}
+
+       
+       
     }
 }
