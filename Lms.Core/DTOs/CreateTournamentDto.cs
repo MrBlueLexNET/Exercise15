@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace Lms.Core.DTOs
 {
     public class CreateTournamentDto
-    {  
-        public string Name { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
-        public DateTime Time { get; set; }
+    {
+        public string Title { get; set; } = string.Empty;
+
+        public DateTime StartDate { get; set; } = DateTime.UtcNow;
     }
 }

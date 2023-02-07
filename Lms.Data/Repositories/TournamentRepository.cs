@@ -21,7 +21,12 @@ namespace Lms.Data.Repositories
         }
         public void Add(Tournament tournament)
         {
-            throw new NotImplementedException();
+            if (tournament is null)
+            {
+                throw new ArgumentNullException(nameof(tournament));
+            }
+
+             db.AddAsync(tournament);
         }
 
         public Task<bool> AnyAsync(int id)

@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Lms.Data.Data;
 using Lms.Core.Entities;
 using Lms.Data.Repositories;
+using AutoMapper;
+using Lms.Core.DTOs;
 
 namespace Lms.Api.Controllers
 {
@@ -87,17 +89,26 @@ namespace Lms.Api.Controllers
         // POST: api/Tournaments
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Tournament>> PostTournament(Tournament tournament)
+        public async Task<ActionResult<CreateTournamentDto>> CreateTournament(CreateTournamentDto dto)
         {
-          if (uow.TournamentRepository == null)
-          {
-              return Problem("Entity set 'LmsApiContext.Tournament'  is null.");
-          }
+           
+
+            var tournament = mapper.Map<Tournament>(dto);
             uow.TournamentRepository.Add(tournament);
             await uow.CompleteAsync();
 
-            return CreatedAtAction("GetTournament", new { id = tournament.TournamentId }, tournament);
+            return CreatedAtAction(nameof(GetTournament), new { id = tournament.TournamentId }, dto);
         }
+
+        //  if (uow.TournamentRepository == null)
+        //  {
+        //      return Problem("Entity set 'LmsApiContext.Tournament'  is null.");
+        //  }
+        //    uow.TournamentRepository.Add(tournament);
+        //    await uow.CompleteAsync();
+
+        //    return CreatedAtAction("GetTournament", new { id = tournament.TournamentId }, tournament);
+        //}
 
         // DELETE: api/Tournaments/5
         [HttpDelete("{id}")]
