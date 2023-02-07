@@ -65,7 +65,12 @@ namespace Lms.Data.Repositories
 
         public void Remove(Tournament tournament)
         {
-            throw new NotImplementedException();
+            if (tournament == null)
+            {
+                throw new ArgumentNullException(nameof(tournament));
+            }
+
+            db.Tournament.Remove(tournament);
         }
 
         public void Update(Tournament tournament)

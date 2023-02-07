@@ -41,7 +41,12 @@ namespace Lms.Data.Repositories
 
         public void Remove(Game game)
         {
-            throw new NotImplementedException();
+            if (game == null)
+            {
+                throw new ArgumentNullException(nameof(game));
+            }
+
+            db.Game.Remove(game);
         }
 
         public void Update(Game game)
