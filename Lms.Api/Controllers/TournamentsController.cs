@@ -158,6 +158,13 @@ namespace Lms.Api.Controllers
             return Ok(mapper.Map<TournamentDto>(tournament));
         }
 
+        [HttpOptions()]
+        public IActionResult GetTournamentsOptions()
+        {
+            Response.Headers.Add("Allow", "GET,HEAD,POST,PATCH,OPTIONS");
+            return Ok();
+        }
+
         //private bool TournamentExists(int id)
         //{
         //    return (uow.TournamentRepository?.Any(e => e.TournamentId == id)).GetValueOrDefault();
