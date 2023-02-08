@@ -30,11 +30,20 @@ namespace Lms.Api.Controllers
 
         // GET: api/Tournaments
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Tournament>>> GetTournament()
+        //public async Task<ActionResult<IEnumerable<Tournament>>> GetTournament()
+        //{
+        //    var tournaments = await uow.TournamentRepository.GetAllAsync();
+        //    return Ok(tournaments);
+        //}
+        public async Task<ActionResult<IEnumerable<TournamentDto>>> GetTournament()
         {
             var tournaments = await uow.TournamentRepository.GetAllAsync();
-            return Ok(tournaments);
+            
+            var dto = mapper.Map<IEnumerable<TournamentDto>>(tournaments);
+            return Ok(dto);
+
         }
+
 
         // GET: api/Tournaments/5
         [HttpGet]

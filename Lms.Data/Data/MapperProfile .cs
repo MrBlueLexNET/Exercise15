@@ -14,6 +14,7 @@ namespace Lms.Data.Data
         public MapperProfile() 
         {
             CreateMap<CreateTournamentDto, Tournament>().ReverseMap();
+            CreateMap<TournamentDto, Tournament>().ReverseMap();
         }
     }
 }

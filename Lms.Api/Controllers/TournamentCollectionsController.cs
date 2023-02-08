@@ -21,7 +21,7 @@ namespace Lms.Api.Controllers
         public TournamentCollectionsController(LmsApiContext context, IMapper mapper) 
         {
             uow = new UoW(context);
-            this.mapper = mapper;
+            this.mapper = mapper; 
 
         }
 
@@ -30,7 +30,7 @@ namespace Lms.Api.Controllers
 
         //[HttpGet("({tournamentIds})", Name = "GetTournamentCollection")]
         //public async Task<ActionResult<IEnumerable<CreateTournamentDto>>>
-        //    GetAuthorCollection(
+        //    GetTournamentCollection(
         //            [ModelBinder(BinderType = typeof(ArrayModelBinder))]
         //            [FromRoute] IEnumerable<Guid> tournamentIds)
         //{
