@@ -11,6 +11,6 @@ namespace Lms.Core.DTOs
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public DateTime Time { get; set; }
-        public ICollection<CreateTournamentDto> Courses { get; set; } = new List<CreateTournamentDto>();
+        public ICollection<CreateTournamentDto> Tournaments { get; set; } = new List<CreateTournamentDto>();
     }
 }

@@ -10,6 +10,7 @@ using Lms.Core.Entities;
 using Lms.Data.Repositories;
 using AutoMapper;
 using Lms.Core.DTOs;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace Lms.Api.Controllers
 {
@@ -137,6 +138,24 @@ namespace Lms.Api.Controllers
             await uow.CompleteAsync();
 
             return NoContent();
+        }
+
+        [HttpPatch("{id}")]
+        public async Task<ActionResult<TournamentDto>> PatchEvent(int id, JsonPatchDocument<TournamentDto> patchDocument)
+        {
+            var tournament = await uow.TournamentRepository.GetAsync(id);
+            if (tournament == null) return NotFound();
+
+            var dto = mapper.Map<TournamentDto>(tournament);
+
+            patchDocument.ApplyTo(dto, ModelState);
+
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            mapper.Map(dto, tournament);
+            await uow.CompleteAsync();
+
+            return Ok(mapper.Map<TournamentDto>(tournament));
         }
 
         //private bool TournamentExists(int id)
