@@ -1,4 +1,5 @@
 ﻿using Lms.Core.Entities;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,7 @@ namespace Lms.Core.Repositories
         void Add(Game gane);
         void Update(Game game);
         void Remove(Game game);
+        //Test Pagination
+        Task<PagedList<Game>> GetGamesAsync(GamesResourceParameters gamesResourceParameters);
     }
 }
