@@ -18,24 +18,18 @@ namespace Lms.Api.Controllers
     [ApiController]
     public class TournamentsController : ControllerBase
     {
-        // private readonly LmsApiContext _context;
+       
         private readonly UoW uow;
         private readonly IMapper mapper;
 
         public TournamentsController(LmsApiContext context, IMapper mapper)
         {
-            //_context = context;
             uow = new UoW(context);
             this.mapper = mapper;
         }
 
         // GET: api/Tournaments
         [HttpGet]
-        //public async Task<ActionResult<IEnumerable<Tournament>>> GetTournament()
-        //{
-        //    var tournaments = await uow.TournamentRepository.GetAllAsync();
-        //    return Ok(tournaments);
-        //}
         public async Task<ActionResult<IEnumerable<TournamentDto>>> GetTournament()
         {
             var tournaments = await uow.TournamentRepository.GetAllAsync();
@@ -45,10 +39,9 @@ namespace Lms.Api.Controllers
 
         }
 
-
         // GET: api/Tournaments/5
-        [HttpGet]
-        [Route("{id}")]
+        [HttpGet("{id}")]
+       
         public async Task<ActionResult<Tournament>> GetTournament(int id)
         {
           if (uow.TournamentRepository == null)
@@ -67,7 +60,7 @@ namespace Lms.Api.Controllers
 
         // PUT: api/Tournaments/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        //[HttpPut("{id}")]
         //public async Task<IActionResult> PutTournament(int id, Tournament tournament)
         //{
         //    if (id != tournament.TournamentId)
@@ -110,16 +103,6 @@ namespace Lms.Api.Controllers
             return CreatedAtAction(nameof(GetTournament), new { id = tournament.TournamentId }, dto);
         }
 
-        //  if (uow.TournamentRepository == null)
-        //  {
-        //      return Problem("Entity set 'LmsApiContext.Tournament'  is null.");
-        //  }
-        //    uow.TournamentRepository.Add(tournament);
-        //    await uow.CompleteAsync();
-
-        //    return CreatedAtAction("GetTournament", new { id = tournament.TournamentId }, tournament);
-        //}
-
         // DELETE: api/Tournaments/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTournament(int id)
@@ -161,7 +144,7 @@ namespace Lms.Api.Controllers
         [HttpOptions()]
         public IActionResult GetTournamentsOptions()
         {
-            Response.Headers.Add("Allow", "GET,HEAD,POST,PATCH,OPTIONS");
+            Response.Headers.Add("Allow", "GET,HEAD,POST,PATCH,DELETE,OPTIONS");
             return Ok();
         }
 
