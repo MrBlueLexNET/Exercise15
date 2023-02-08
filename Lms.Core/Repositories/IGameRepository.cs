@@ -1,4 +1,5 @@
 ﻿using Lms.Core.Entities;
+using Lms.Core.ResourceParameters;
 using PagedList;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,6 @@ namespace Lms.Core.Repositories
         void Update(Game game);
         void Remove(Game game);
         //Test Pagination
-        Task<PagedList<Game>> GetGamesAsync(GamesResourceParameters gamesResourceParameters);
+        Task<PagedList<Game>> GetGamesAsync(IGamesResourceParameters gamesResourceParameters);
     }
 }

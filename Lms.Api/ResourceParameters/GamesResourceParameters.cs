@@ -1,4 +1,6 @@
-﻿namespace Lms.Api.ResourceParameters
+﻿using Lms.Core.ResourceParameters;
+
+namespace Lms.Api.ResourceParameters
 {
     public class GamesResourceParameters : IGamesResourceParameters
     {

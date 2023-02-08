@@ -1,7 +1,9 @@
 ﻿using Lms.Core.Entities;
 using Lms.Core.Repositories;
+using Lms.Core.ResourceParameters;
 using Lms.Data.Data;
 using Microsoft.EntityFrameworkCore;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +37,11 @@ namespace Lms.Data.Repositories
         }
 
         public Task<Game> GetAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<PagedList<Game>> GetGamesAsync(IGamesResourceParameters gamesResourceParameters)
         {
             throw new NotImplementedException();
         }
