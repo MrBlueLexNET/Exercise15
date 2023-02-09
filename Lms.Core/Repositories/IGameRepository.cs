@@ -18,6 +18,8 @@ namespace Lms.Core.Repositories
         void Update(Game game);
         void Remove(Game game);
         //Test Pagination
-        Task<PagedList<Game>> GetGamesAsync(IGamesResourceParameters gamesResourceParameters);
+        //Task<PagedList<Game>> GetGamesAsync(IGamesResourceParameters gamesResourceParameters);
+        //Test Filter by Name and Search Name and Description
+        Task<IEnumerable<Game>> GetGamesAsync(IGamesResourceParameters gamesResourceParameters);
     }
 }

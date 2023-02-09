@@ -41,10 +41,42 @@ namespace Lms.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<PagedList<Game>> GetGamesAsync(IGamesResourceParameters gamesResourceParameters)
+        //public Task<PagedList<Game>> GetGamesAsync(IGamesResourceParameters gamesResourceParameters)
+        public async Task<IEnumerable<Game>> GetGamesAsync(
+        IGamesResourceParameters gamesResourceParameters)
         {
-            throw new NotImplementedException();
+      
+            if (gamesResourceParameters == null)
+            {
+                throw new ArgumentNullException(nameof(gamesResourceParameters));
+            }
+
+            if (string.IsNullOrWhiteSpace(gamesResourceParameters.Name)
+                && string.IsNullOrWhiteSpace(gamesResourceParameters.SearchQuery))
+            {
+                return await GetAllAsync();
+            }
+
+            // collection to start from
+            var collection = db.Game as IQueryable<Game>;
+
+            if (!string.IsNullOrWhiteSpace(gamesResourceParameters.Name))
+            {
+                var gameName = gamesResourceParameters.Name.Trim();
+                collection = collection.Where(a => a.Name == gameName);
+            }
+
+            if (!string.IsNullOrWhiteSpace(gamesResourceParameters.SearchQuery))
+            {
+                var searchQuery = gamesResourceParameters.SearchQuery.Trim();
+                collection = collection.Where(a => a.Name.Contains(searchQuery)
+                   || a.Description.Contains(searchQuery));
+            }
+
+            return await collection.ToListAsync();
         }
+
+
 
         public void Remove(Game game)
         {

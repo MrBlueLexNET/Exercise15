@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using Lms.Data.Data;
 using Lms.Core.Entities;
 using Lms.Data.Repositories;
+using Lms.Api.ResourceParameters;
+using Lms.Core.DTOs;
+using AutoMapper;
 
 namespace Lms.Api.Controllers
 {
@@ -15,22 +18,36 @@ namespace Lms.Api.Controllers
     [ApiController]
     public class GamesController : ControllerBase
     {
-        //private readonly LmsApiContext _context;
         private readonly UoW uow;
+        private readonly IMapper mapper;
 
-        public GamesController(LmsApiContext context)
+        public GamesController(LmsApiContext context, IMapper mapper)
         {
-            //_context = context;
             uow = new UoW(context);
-
+            this.mapper = mapper;
         }
 
-        // GET: api/Games
+        //// GET: api/Games
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<Game>>> GetGame()
+        //{
+        //    var games = await uow.GameRepository.GetAllAsync();
+        //    return Ok(games);
+        //}
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Game>>> GetGame()
+        [HttpHead]
+        //Search and Filter || ?searchQuery && ?name
+        public async Task<ActionResult<IEnumerable<GameDto>>> GetGames(
+        [FromQuery] GamesResourceParameters gamesResourceParameters)
         {
-            var games = await uow.GameRepository.GetAllAsync();
-            return Ok(games);
+            // throw new Exception("Test exception");
+
+            // get games from repo
+            var gamesFromRepo = await uow.GameRepository.GetGamesAsync(gamesResourceParameters);
+               
+            // return them
+            return Ok(mapper.Map<IEnumerable<GameDto>>(gamesFromRepo));
         }
 
         // GET: api/Games/5
