@@ -36,9 +36,11 @@ namespace Lms.Data.Repositories
            .ToListAsync();
         }
 
-        public Task<Game> GetAsync(int id)
+        public async Task<Game?> GetAsync(int id)
         {
-            throw new NotImplementedException();
+            var query = db.Game.AsQueryable();
+
+            return await query.FirstOrDefaultAsync(c => c.GameId == id);
         }
 
         //public Task<PagedList<Game>> GetGamesAsync(IGamesResourceParameters gamesResourceParameters)

@@ -51,14 +51,14 @@ namespace Lms.Api.Controllers
         }
 
         // GET: api/Games/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Game>> GetGame(int id)
+        [HttpGet("{gameId}")]
+        public async Task<ActionResult<Game>> GetGame(int gameId)
         {
           if (uow.GameRepository == null)
           {
               return NotFound();
           }
-            var game = await uow.GameRepository.GetAsync(id);
+            var game = await uow.GameRepository.GetAsync(gameId);
 
             if (game == null)
             {
@@ -70,10 +70,10 @@ namespace Lms.Api.Controllers
 
         // PUT: api/Games/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        //public async Task<IActionResult> PutGame(int id, Game game)
+        [HttpPut("{gameId}")]
+        //public async Task<IActionResult> PutGame(int gameId, Game game)
         //{
-        //    if (id != game.GameId)
+        //    if (gameId != game.GameId)
         //    {
         //        return BadRequest();
         //    }
@@ -86,7 +86,7 @@ namespace Lms.Api.Controllers
         //    }
         //    catch (DbUpdateConcurrencyException)
         //    {
-        //        if (!GameExists(id))
+        //        if (!GameExists(gameId))
         //        {
         //            return NotFound();
         //        }
@@ -111,18 +111,18 @@ namespace Lms.Api.Controllers
             uow.GameRepository.Add(game);
             await uow.CompleteAsync();
 
-            return CreatedAtAction("GetGame", new { id = game.GameId }, game);
+            return CreatedAtAction("GetGame", new { gameId = game.GameId }, game);
         }
 
         // DELETE: api/Games/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteGame(int id)
+        [HttpDelete("{gameId}")]
+        public async Task<IActionResult> DeleteGame(int gameId)
         {
             if (uow.GameRepository == null)
             {
                 return NotFound();
             }
-            var game = await uow.GameRepository.GetAsync(id);
+            var game = await uow.GameRepository.GetAsync(gameId);
             if (game == null)
             {
                 return NotFound();
@@ -134,9 +134,9 @@ namespace Lms.Api.Controllers
             return NoContent();
         }
 
-        //private bool GameExists(int id)
+        //private bool GameExists(int gameId)
         //{
-        //    return (uow.GameRepository?.Any(e => e.GameId == id)).GetValueOrDefault();
+        //    return (uow.GameRepository?.Any(e => e.GameId == gameId)).GetValueOrDefault();
         //}
     }
 }
