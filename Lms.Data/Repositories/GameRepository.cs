@@ -20,14 +20,20 @@ namespace Lms.Data.Repositories
         {
             this.db = db;
         }
-        public void Add(Game gane)
+        public void Add(Game game)
         {
-            throw new NotImplementedException();
+            if (game is null)
+            {
+                throw new ArgumentNullException(nameof(game));
+            }
+
+            db.AddAsync(game);
         }
 
-        public Task<bool> AnyAsync(int id)
+        public async Task<bool> AnyAsync(int id)
         {
             throw new NotImplementedException();
+
         }
 
         public async Task<IEnumerable<Game>> GetAllAsync()
@@ -38,9 +44,11 @@ namespace Lms.Data.Repositories
 
         public async Task<Game?> GetAsync(int id)
         {
-            var query = db.Game.AsQueryable();
 
-            return await query.FirstOrDefaultAsync(c => c.GameId == id);
+            ArgumentNullException.ThrowIfNull(id, nameof(id));
+            return await db.Game
+                .FirstOrDefaultAsync(g => g.GameId == id);
+          
         }
 
         //public Task<PagedList<Game>> GetGamesAsync(IGamesResourceParameters gamesResourceParameters)

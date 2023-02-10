@@ -14,7 +14,7 @@ namespace Lms.Core.Repositories
         Task<IEnumerable<Game>> GetAllAsync();
         Task<Game> GetAsync(int id);
         Task<bool> AnyAsync(int id);
-        void Add(Game gane);
+        void Add(Game game);
         void Update(Game game);
         void Remove(Game game);
         //Test Pagination
