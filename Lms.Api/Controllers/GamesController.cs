@@ -11,6 +11,8 @@ using Lms.Data.Repositories;
 using Lms.Api.ResourceParameters;
 using Lms.Core.DTOs;
 using AutoMapper;
+using Lms.Api.Helpers;
+using Lms.Core.ResourceParameters;
 
 namespace Lms.Api.Controllers
 {
@@ -38,7 +40,10 @@ namespace Lms.Api.Controllers
         [HttpGet]
         [HttpHead]
         //Search and Filter || ?searchQuery && ?name
-        public async Task<ActionResult<IEnumerable<GameDto>>> GetGames(
+        //public async Task<ActionResult<IEnumerable<GameDto>>> GetGames(
+
+        //Data Shaping || GamesResourceParameters + Fields (Name, Description) OK
+        public async Task<IActionResult> GetGames(
         [FromQuery] GamesResourceParameters gamesResourceParameters)
         {
             // throw new Exception("Test exception");
@@ -47,12 +52,13 @@ namespace Lms.Api.Controllers
             var gamesFromRepo = await uow.GameRepository.GetGamesAsync(gamesResourceParameters);
                
             // return them
-            return Ok(mapper.Map<IEnumerable<GameDto>>(gamesFromRepo));
+            return Ok(mapper.Map<IEnumerable<GameDto>>(gamesFromRepo)
+                .ShapeData(gamesResourceParameters.Fields));
         }
 
         // GET: api/Games/5
-        [HttpGet("{gameId}")]
-        public async Task<ActionResult<Game>> GetGame(int gameId)
+        [HttpGet("{gameId}" , Name= "GetGame")]
+        public async Task<ActionResult<Game>> GetGame(int gameId, string? fields)
         {
           if (uow.GameRepository == null)
           {
@@ -65,7 +71,93 @@ namespace Lms.Api.Controllers
                 return NotFound();
             }
 
-            return game;
+            // create links
+            var links = CreateLinksForGame(gameId, fields);
+
+            // add 
+           var returnGameAndLinks = game as IDictionary<string, object?>;
+
+            returnGameAndLinks.Add("links", links);
+
+            // return
+            return Ok(returnGameAndLinks);
+
+            //return game;
+        }
+
+        //HATEOAS (Hypermedia as the Engine of Application State) Add links
+        private IEnumerable<LinkDto> CreateLinksForGame(int gameId, string? fields)
+        {
+            var links = new List<LinkDto>();
+
+            if (string.IsNullOrWhiteSpace(fields))
+            {
+                links.Add(
+                  new(Url.Link("GetGames", new { gameId }),
+                  "self",
+                  "GET"));
+            }
+            else
+            {
+                links.Add(
+                  new(Url.Link("GetGames", new { gameId, fields }),
+                  "self",
+                  "GET"));
+            }
+
+            links.Add(
+                  new(Url.Link("CreateTournamentForGame", new { gameId }),
+                  "create_tournament_for_game",
+                  "POST"));
+            links.Add(
+                 new(Url.Link("GetTournamentsForGame", new { gameId }),
+                 "games",
+                 "GET"));
+
+            return links;
+        }
+
+        private string? CreateAuthorsResourceUri(
+        GamesResourceParameters gamesResourceParameters,
+        ResourceUriType type)
+        {
+            switch (type)
+            {
+                case ResourceUriType.PreviousPage:
+                    return Url.Link("GetAuthors",
+                        new
+                        {
+                            fields = gamesResourceParameters.Fields,
+                            //orderBy = gamesResourceParameters.OrderBy,
+                            pageNumber = gamesResourceParameters.PageNumber - 1,
+                            pageSize = gamesResourceParameters.PageSize,
+                            mainCategory = gamesResourceParameters.Name,
+                            searchQuery = gamesResourceParameters.SearchQuery
+                        });
+                case ResourceUriType.NextPage:
+                    return Url.Link("GetAuthors",
+                        new
+                        {
+                            fields = gamesResourceParameters.Fields,
+                            //orderBy = gamesResourceParameters.OrderBy,
+                            pageNumber = gamesResourceParameters.PageNumber + 1,
+                            pageSize = gamesResourceParameters.PageSize,
+                            mainCategory = gamesResourceParameters.Name,
+                            searchQuery = gamesResourceParameters.SearchQuery
+                        });
+                case ResourceUriType.Current:
+                default:
+                    return Url.Link("GetAuthors",
+                        new
+                        {
+                            fields = gamesResourceParameters.Fields,
+                            //orderBy = gamesResourceParameters.OrderBy,
+                            pageNumber = gamesResourceParameters.PageNumber,
+                            pageSize = gamesResourceParameters.PageSize,
+                            mainCategory = gamesResourceParameters.Name,
+                            searchQuery = gamesResourceParameters.SearchQuery
+                        });
+            }
         }
 
         // PUT: api/Games/5

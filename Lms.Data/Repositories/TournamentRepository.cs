@@ -50,7 +50,7 @@ namespace Lms.Data.Repositories
             .ToListAsync();
         }
 
-        public async Task<Tournament> GetAsync(int id)
+        public async Task<Tournament?> GetAsync(int id)
         {
 
 

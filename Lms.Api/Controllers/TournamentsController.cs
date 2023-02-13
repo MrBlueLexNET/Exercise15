@@ -32,18 +32,21 @@ namespace Lms.Api.Controllers
         }
 
         // GET: api/Tournaments
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<TournamentDto>>> GetTournament()
+        [HttpGet (Name = "GetTournamentsForGame")]
+        public async Task<ActionResult<IEnumerable<TournamentDto>>> GetTournamentsForGame(int gameId)
         {
-            var tournaments = await uow.TournamentRepository.GetAllAsync();
-            
+           
+
+            //var tournaments = await uow.TournamentRepository.GetAllAsync();
+            var tournaments = await uow.TournamentRepository.GetAsync(gameId);
+
             var dto = mapper.Map<IEnumerable<TournamentDto>>(tournaments);
             return Ok(dto);
 
         }
 
         // GET: api/Tournaments/5
-        [HttpGet("{tournamentId}")]
+        [HttpGet("{tournamentId}", Name = "GetTournament")]
        
         public async Task<ActionResult<Tournament>> GetTournament(int tournamentId)
         {
@@ -57,7 +60,7 @@ namespace Lms.Api.Controllers
             {
                 return NotFound();
             }
-
+                        
             return tournament;
         }
 
@@ -94,8 +97,8 @@ namespace Lms.Api.Controllers
 
         // POST: api/Tournaments
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<CreateTournamentDto>> CreateTournament(int gameId, CreateTournamentDto dto)
+        [HttpPost (Name= "CreateTournamentForGame")]
+        public async Task<ActionResult<CreateTournamentDto>> CreateTournamentForGame(int gameId, CreateTournamentDto dto)
         {
             var game = await uow.GameRepository.GetAsync(gameId);
 
@@ -111,7 +114,11 @@ namespace Lms.Api.Controllers
             uow.TournamentRepository.Add(tournament);
             await uow.CompleteAsync();
 
-            return CreatedAtAction(nameof(GetTournament), new { gameId = game.GameId, tournamentId = tournament.TournamentId }, dto);
+            // return CreatedAtAction(nameof(GetTournament), new { gameId = game.GameId, tournamentId = tournament.TournamentId }, dto);
+
+            return CreatedAtRoute("GetTournamentforGame",
+            new { gameId, tournamentId = tournament.TournamentId },
+            tournament);
         }
 
         // DELETE: api/Tournaments/5
