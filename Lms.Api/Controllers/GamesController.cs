@@ -83,6 +83,15 @@ namespace Lms.Api.Controllers
           {
               return NotFound();
           }
+
+            if (!propertyCheckerService.TypeHasProperties<GameDto>(fields))
+            {
+                return BadRequest(
+                  problemDetailsFactory.CreateProblemDetails(HttpContext,
+                      statusCode: 400,
+                      detail: $"Not all requested data shaping fields exist on " +
+                      $"the resource: {fields}"));
+            }
             var game = await uow.GameRepository.GetAsync(gameId);
 
             if (game == null)
