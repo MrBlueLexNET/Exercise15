@@ -13,6 +13,8 @@ using Lms.Core.DTOs;
 using AutoMapper;
 using Lms.Api.Helpers;
 using Lms.Core.ResourceParameters;
+using Lms.Api.Services;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace Lms.Api.Controllers
 {
@@ -22,11 +24,16 @@ namespace Lms.Api.Controllers
     {
         private readonly UoW uow;
         private readonly IMapper mapper;
+        private readonly IPropertyCheckerService propertyCheckerService;
+        private readonly ProblemDetailsFactory problemDetailsFactory;
 
-        public GamesController(LmsApiContext context, IMapper mapper)
+        public GamesController(LmsApiContext context, IMapper mapper, IPropertyCheckerService propertyCheckerService,
+        ProblemDetailsFactory problemDetailsFactory)
         {
             uow = new UoW(context);
             this.mapper = mapper;
+            this.problemDetailsFactory = problemDetailsFactory;
+            this.propertyCheckerService = propertyCheckerService;
         }
 
         //// GET: api/Games
@@ -47,6 +54,17 @@ namespace Lms.Api.Controllers
         [FromQuery] GamesResourceParameters gamesResourceParameters)
         {
             // throw new Exception("Test exception");
+
+
+            if (!propertyCheckerService.TypeHasProperties<GameDto>
+             (gamesResourceParameters.Fields))
+            {
+                return BadRequest(
+                    problemDetailsFactory.CreateProblemDetails(HttpContext,
+                        statusCode: 400,
+                        detail: $"Not all requested data shaping fields exist on " +
+                        $"the resource: {gamesResourceParameters.Fields}"));
+            }
 
             // get games from repo
             var gamesFromRepo = await uow.GameRepository.GetGamesAsync(gamesResourceParameters);

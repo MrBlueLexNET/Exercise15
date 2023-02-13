@@ -6,6 +6,7 @@ using Lms.Data.Data;
 using Lms.Api.Extensions;
 using Lms.Core.Repositories;
 using Lms.Data.Repositories;
+using Lms.Api.Services;
 
 namespace Lms.Api
 {
@@ -36,6 +37,9 @@ namespace Lms.Api
             builder.Services.AddScoped<IUoW, UoW>();
 
             builder.Services.AddAutoMapper(typeof(MapperProfile));
+
+            //Add Transient Service for DataShaping fields Error Handling via Interface
+            builder.Services.AddTransient<IPropertyCheckerService, PropertyCheckerService>();
 
             var app = builder.Build();
 
