@@ -57,8 +57,9 @@ namespace Lms.Api.Controllers
         }
 
         // GET: api/Games/5
+        //Data Shaping Singel Object
         [HttpGet("{gameId}" , Name= "GetGame")]
-        public async Task<ActionResult<Game>> GetGame(int gameId, string? fields)
+        public async Task<IActionResult> GetGame(int gameId, string? fields)
         {
           if (uow.GameRepository == null)
           {
@@ -72,15 +73,18 @@ namespace Lms.Api.Controllers
             }
 
             // create links
-            var links = CreateLinksForGame(gameId, fields);
+            //var links = CreateLinksForGame(gameId, fields);
 
             // add 
-           var returnGameAndLinks = game as IDictionary<string, object?>;
+            //var returnGameAndLinks = game as IDictionary<string, object?>;
 
-            returnGameAndLinks.Add("links", links);
+            //returnGameAndLinks.Add("links", links);
 
             // return
-            return Ok(returnGameAndLinks);
+            //return Ok(returnGameAndLinks);
+            // return them
+            return Ok(mapper.Map<GameDto>(game)
+                .ShapeData(fields));
 
             //return game;
         }
